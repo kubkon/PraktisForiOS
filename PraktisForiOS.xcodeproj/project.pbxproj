@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE81870C1FF3C51C00C1F3DC /* Credentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE81870B1FF3C51C00C1F3DC /* Credentials.swift */; };
 		CEE08EC31FF27C6B00F25DDA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE08EC21FF27C6B00F25DDA /* AppDelegate.swift */; };
 		CEE08EC51FF27C6B00F25DDA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE08EC41FF27C6B00F25DDA /* ViewController.swift */; };
 		CEE08EC81FF27C6B00F25DDA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEE08EC61FF27C6B00F25DDA /* Main.storyboard */; };
@@ -14,6 +15,10 @@
 		CEE08ECD1FF27C6B00F25DDA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEE08ECB1FF27C6B00F25DDA /* LaunchScreen.storyboard */; };
 		CEE08ED81FF27C6C00F25DDA /* PraktisForiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE08ED71FF27C6C00F25DDA /* PraktisForiOSTests.swift */; };
 		CEE08EE31FF27C6C00F25DDA /* PraktisForiOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE08EE21FF27C6C00F25DDA /* PraktisForiOSUITests.swift */; };
+		CEE08EFE1FF2827D00F25DDA /* BridgeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE08EFD1FF2827D00F25DDA /* BridgeViewController.m */; };
+		CEE08F021FF2854400F25DDA /* SpotifyAudioPlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE08EFF1FF2854400F25DDA /* SpotifyAudioPlayback.framework */; };
+		CEE08F031FF2854400F25DDA /* SpotifyAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE08F001FF2854400F25DDA /* SpotifyAuthentication.framework */; };
+		CEE08F041FF2854400F25DDA /* SpotifyMetadata.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE08F011FF2854400F25DDA /* SpotifyMetadata.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CE81870B1FF3C51C00C1F3DC /* Credentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credentials.swift; sourceTree = "<group>"; };
 		CEE08EBF1FF27C6B00F25DDA /* PraktisForiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PraktisForiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE08EC21FF27C6B00F25DDA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CEE08EC41FF27C6B00F25DDA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -47,6 +53,17 @@
 		CEE08EDE1FF27C6C00F25DDA /* PraktisForiOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PraktisForiOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE08EE21FF27C6C00F25DDA /* PraktisForiOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PraktisForiOSUITests.swift; sourceTree = "<group>"; };
 		CEE08EE41FF27C6C00F25DDA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CEE08EF11FF2812C00F25DDA /* ios-sdk */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "ios-sdk"; path = "../ios-sdk"; sourceTree = "<group>"; };
+		CEE08EF31FF2819900F25DDA /* SpotifyAudioPlayback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpotifyAudioPlayback.framework; path = "../ios-sdk/SpotifyAudioPlayback.framework"; sourceTree = "<group>"; };
+		CEE08EF41FF2819900F25DDA /* SpotifyAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpotifyAuthentication.framework; path = "../ios-sdk/SpotifyAuthentication.framework"; sourceTree = "<group>"; };
+		CEE08EF51FF2819900F25DDA /* SpotifyMetadata.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpotifyMetadata.framework; path = "../ios-sdk/SpotifyMetadata.framework"; sourceTree = "<group>"; };
+		CEE08EF91FF2820500F25DDA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		CEE08EFB1FF2827D00F25DDA /* PraktisForiOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PraktisForiOS-Bridging-Header.h"; sourceTree = "<group>"; };
+		CEE08EFC1FF2827D00F25DDA /* BridgeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgeViewController.h; sourceTree = "<group>"; };
+		CEE08EFD1FF2827D00F25DDA /* BridgeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BridgeViewController.m; sourceTree = "<group>"; };
+		CEE08EFF1FF2854400F25DDA /* SpotifyAudioPlayback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAudioPlayback.framework; sourceTree = "<group>"; };
+		CEE08F001FF2854400F25DDA /* SpotifyAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAuthentication.framework; sourceTree = "<group>"; };
+		CEE08F011FF2854400F25DDA /* SpotifyMetadata.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyMetadata.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +71,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEE08F021FF2854400F25DDA /* SpotifyAudioPlayback.framework in Frameworks */,
+				CEE08F041FF2854400F25DDA /* SpotifyMetadata.framework in Frameworks */,
+				CEE08F031FF2854400F25DDA /* SpotifyAuthentication.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,10 +97,17 @@
 		CEE08EB61FF27C6B00F25DDA = {
 			isa = PBXGroup;
 			children = (
+				CEE08EFC1FF2827D00F25DDA /* BridgeViewController.h */,
+				CEE08EFD1FF2827D00F25DDA /* BridgeViewController.m */,
 				CEE08EC11FF27C6B00F25DDA /* PraktisForiOS */,
 				CEE08ED61FF27C6C00F25DDA /* PraktisForiOSTests */,
 				CEE08EE11FF27C6C00F25DDA /* PraktisForiOSUITests */,
 				CEE08EC01FF27C6B00F25DDA /* Products */,
+				CEE08EF01FF2812C00F25DDA /* Frameworks */,
+				CEE08EFB1FF2827D00F25DDA /* PraktisForiOS-Bridging-Header.h */,
+				CEE08EFF1FF2854400F25DDA /* SpotifyAudioPlayback.framework */,
+				CEE08F001FF2854400F25DDA /* SpotifyAuthentication.framework */,
+				CEE08F011FF2854400F25DDA /* SpotifyMetadata.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -103,6 +130,7 @@
 				CEE08EC91FF27C6B00F25DDA /* Assets.xcassets */,
 				CEE08ECB1FF27C6B00F25DDA /* LaunchScreen.storyboard */,
 				CEE08ECE1FF27C6B00F25DDA /* Info.plist */,
+				CE81870B1FF3C51C00C1F3DC /* Credentials.swift */,
 			);
 			path = PraktisForiOS;
 			sourceTree = "<group>";
@@ -123,6 +151,18 @@
 				CEE08EE41FF27C6C00F25DDA /* Info.plist */,
 			);
 			path = PraktisForiOSUITests;
+			sourceTree = "<group>";
+		};
+		CEE08EF01FF2812C00F25DDA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CEE08EF91FF2820500F25DDA /* AVFoundation.framework */,
+				CEE08EF31FF2819900F25DDA /* SpotifyAudioPlayback.framework */,
+				CEE08EF41FF2819900F25DDA /* SpotifyAuthentication.framework */,
+				CEE08EF51FF2819900F25DDA /* SpotifyMetadata.framework */,
+				CEE08EF11FF2812C00F25DDA /* ios-sdk */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -193,6 +233,7 @@
 				TargetAttributes = {
 					CEE08EBE1FF27C6B00F25DDA = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
 					CEE08ED21FF27C6C00F25DDA = {
@@ -259,8 +300,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEE08EFE1FF2827D00F25DDA /* BridgeViewController.m in Sources */,
 				CEE08EC51FF27C6B00F25DDA /* ViewController.swift in Sources */,
 				CEE08EC31FF27C6B00F25DDA /* AppDelegate.swift in Sources */,
+				CE81870C1FF3C51C00C1F3DC /* Credentials.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,12 +469,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9FU5YBRU8W;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = PraktisForiOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jakubkonka.PraktisForiOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "PraktisForiOS-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -441,12 +491,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9FU5YBRU8W;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = PraktisForiOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jakubkonka.PraktisForiOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "PraktisForiOS-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
