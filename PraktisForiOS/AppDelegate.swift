@@ -30,7 +30,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
                 let userDefaults = UserDefaults.standard
                 let sessionData = NSKeyedArchiver.archivedData(withRootObject: session)
-                print(sessionData)
                 userDefaults.set(sessionData, forKey: "SpotifySession")
                 userDefaults.synchronize()
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "loginSuccessful"), object: nil)

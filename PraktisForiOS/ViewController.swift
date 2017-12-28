@@ -8,17 +8,21 @@
 
 import UIKit
 
-class ViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, SPTAudioStreamingDelegate {
+class ViewController: UIViewController, UITableViewDataSource, SPTAudioStreamingPlaybackDelegate, SPTAudioStreamingDelegate {
+    
+    @IBOutlet weak var playlistsList: UITableView!
     @IBOutlet weak var loginButton: UIButton!
     
     var auth = SPTAuth.defaultInstance()!
     var session: SPTSession!
+    var playlists: SPTPlaylistList!
     var player: SPTAudioStreamingController?
     var loginURL: URL?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        playlistsList.dataSource = self
         setUp()
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.updateAfterFirstLogin), name: NSNotification.Name(rawValue: "loginSuccessful"), object: nil)
     }
@@ -28,6 +32,25 @@ class ViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, SPTAu
         // Dispose of any resources that can be recreated.
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if playlists == nil {
+            return 0
+        }
+        return playlists.items.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if playlists == nil {
+            return UITableViewCell()
+        }
+        let playlist = playlists.items[indexPath.item] as! SPTPartialPlaylist
+        let cell = UITableViewCell()
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
+        label.text = playlist.name + " (\(playlist.trackCount))"
+        cell.addSubview(label)
+        return cell
+    }
+    
     @objc func updateAfterFirstLogin() {
         let userDefaults = UserDefaults.standard
         
@@ -35,6 +58,18 @@ class ViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, SPTAu
             let sessionDataObj = sessionObj as! Data
             let firstTimeSession = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
             self.session = firstTimeSession
+            
+            self.loginButton.setTitle("Logged in as " + self.session.canonicalUsername, for: .normal)
+            self.loginButton.isEnabled = false
+            
+            SPTPlaylistList.playlists(
+                forUser: self.session.canonicalUsername,
+                withAccessToken: self.session.accessToken,
+                callback: {(error, data) in
+                    self.playlists = data as! SPTPlaylistList
+                    self.playlistsList.reloadData()
+            })
+            
             initialisePlayer(authSession: session)
         }
     }
@@ -51,11 +86,11 @@ class ViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, SPTAu
     
     func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
         print("logged in")
-        self.player?.playSpotifyURI("spotify:track:58s6EuEYJdlb0kO7awm3Vp", startingWith: 0, startingWithPosition: 0, callback: {(error) in
-            if error != nil {
-                print("playing...")
-            }
-        })
+//        self.player?.playSpotifyURI("spotify:track:58s6EuEYJdlb0kO7awm3Vp", startingWith: 0, startingWithPosition: 0, callback: {(error) in
+//            if error != nil {
+//                print("playing...")
+//            }
+//        })
     }
 
     func setUp() {
@@ -71,11 +106,11 @@ class ViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, SPTAu
     }
     
     @IBAction func loginButtonPressed(_ sender: Any) {
-        if UIApplication.shared.openURL(loginURL!) {
-            if auth.canHandle(auth.redirectURL) {
-                
-            }
-        }
+        UIApplication.shared.open(loginURL!, options: [:], completionHandler: {
+            (success) in
+                if self.auth.canHandle(self.auth.redirectURL) {
+                }
+        })
     }
 }
 
