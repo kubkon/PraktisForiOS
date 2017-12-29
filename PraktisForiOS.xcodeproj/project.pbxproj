@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		CE81870C1FF3C51C00C1F3DC /* Credentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE81870B1FF3C51C00C1F3DC /* Credentials.swift */; };
+		CE81870D1FF67A1500C1F3DC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE08EF91FF2820500F25DDA /* AVFoundation.framework */; };
 		CEE08EC31FF27C6B00F25DDA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE08EC21FF27C6B00F25DDA /* AppDelegate.swift */; };
 		CEE08EC51FF27C6B00F25DDA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE08EC41FF27C6B00F25DDA /* ViewController.swift */; };
 		CEE08EC81FF27C6B00F25DDA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEE08EC61FF27C6B00F25DDA /* Main.storyboard */; };
@@ -71,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE81870D1FF67A1500C1F3DC /* AVFoundation.framework in Frameworks */,
 				CEE08F021FF2854400F25DDA /* SpotifyAudioPlayback.framework in Frameworks */,
 				CEE08F041FF2854400F25DDA /* SpotifyMetadata.framework in Frameworks */,
 				CEE08F031FF2854400F25DDA /* SpotifyAuthentication.framework in Frameworks */,
@@ -478,6 +480,7 @@
 				);
 				INFOPLIST_FILE = PraktisForiOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jakubkonka.PraktisForiOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "PraktisForiOS-Bridging-Header.h";
@@ -500,6 +503,7 @@
 				);
 				INFOPLIST_FILE = PraktisForiOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jakubkonka.PraktisForiOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "PraktisForiOS-Bridging-Header.h";

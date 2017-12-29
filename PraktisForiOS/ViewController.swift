@@ -18,6 +18,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var playlists: SPTPlaylistList!
     var player: SPTAudioStreamingController?
     var loginURL: URL?
+    var playing = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,12 +56,47 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let playlist = playlists.items[indexPath.item] as! SPTPartialPlaylist
-        self.player?.playSpotifyURI(playlist.playableUri.absoluteString, startingWith: 0, startingWithPosition: 0, callback:
-            {(error) in
+        SPTPlaylistSnapshot.playlist(withURI: playlist.playableUri, accessToken: self.session.accessToken, callback:
+            {(error, data) in
                 if error != nil {
-                    print(error.debugDescription)
+                    print("Something went wrong: " + error.debugDescription)
                 }
+                
+                if let pl = data as? SPTPlaylistSnapshot {
+                    for tr in pl.firstTrackPage.items {
+                        if let track = tr as? SPTPlaylistTrack {
+                            if (self.playing) {
+                                self.player?.queueSpotifyURI(track.playableUri.absoluteString, callback:
+                                    {(error) in
+                                        if error != nil {
+                                            print("Couldn't enqueue a track!")
+                                        }
+                                })
+                            }
+                            else {
+                                self.player?.playSpotifyURI(track.playableUri.absoluteString, startingWith: 0, startingWithPosition:0, callback:
+                                    {(error) in
+                                        if error != nil {
+                                            print("Couldn't play a track!")
+                                        }
+                                })
+                            }
+                        }
+                    }
+                }
+                
+                self.player?.setShuffle(true, callback: {(error) in
+                    if error != nil {
+                        print("Couldn't shuffle the playback list: " + error.debugDescription)
+                    }
+                })
         })
+    }
+    
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didStartPlayingTrack trackUri: String!) {
+        playing = true
+        // get info about current track
+        
     }
     
     @objc func updateAfterFirstLogin() {
