@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDataSource, SPTAudioStreamingPlaybackDelegate, SPTAudioStreamingDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SPTAudioStreamingPlaybackDelegate, SPTAudioStreamingDelegate {
     
     @IBOutlet weak var playlistsList: UITableView!
     @IBOutlet weak var loginButton: UIButton!
@@ -23,6 +23,8 @@ class ViewController: UIViewController, UITableViewDataSource, SPTAudioStreaming
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         playlistsList.dataSource = self
+        playlistsList.delegate = self
+        
         setUp()
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.updateAfterFirstLogin), name: NSNotification.Name(rawValue: "loginSuccessful"), object: nil)
     }
@@ -49,6 +51,16 @@ class ViewController: UIViewController, UITableViewDataSource, SPTAudioStreaming
         label.text = playlist.name + " (\(playlist.trackCount))"
         cell.addSubview(label)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let playlist = playlists.items[indexPath.item] as! SPTPartialPlaylist
+        self.player?.playSpotifyURI(playlist.playableUri.absoluteString, startingWith: 0, startingWithPosition: 0, callback:
+            {(error) in
+                if error != nil {
+                    print(error.debugDescription)
+                }
+        })
     }
     
     @objc func updateAfterFirstLogin() {
@@ -82,15 +94,6 @@ class ViewController: UIViewController, UITableViewDataSource, SPTAudioStreaming
             try! player!.start(withClientId: auth.clientID)
             self.player!.login(withAccessToken: authSession.accessToken)
         }
-    }
-    
-    func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
-        print("logged in")
-//        self.player?.playSpotifyURI("spotify:track:58s6EuEYJdlb0kO7awm3Vp", startingWith: 0, startingWithPosition: 0, callback: {(error) in
-//            if error != nil {
-//                print("playing...")
-//            }
-//        })
     }
 
     func setUp() {
