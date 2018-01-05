@@ -12,13 +12,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var playlistsList: UITableView!
     @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var trackArtwork: UIImageView!
+    @IBOutlet weak var trackName: UILabel!
+    @IBOutlet weak var prevTrackButton: UIButton!
+    @IBOutlet weak var nextTrackButton: UIButton!
+    @IBOutlet weak var pauseTrackButton: UIButton!
+    
+    let timerDuration = 120.0
     
     var auth = SPTAuth.defaultInstance()!
     var session: SPTSession!
     var playlists: SPTPlaylistList!
     var player: SPTAudioStreamingController?
     var loginURL: URL?
-    var songsForPlayback = [SPTPlaylistTrack]()
+    var dequeued = [SPTPlaylistTrack]()
+    var enqueued = [SPTPlaylistTrack]()
     var timer = Timer()
     
     override func viewDidLoad() {
@@ -57,7 +65,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Clean up
-        self.songsForPlayback.removeAll(keepingCapacity: false)
+        self.dequeued.removeAll(keepingCapacity: false)
+        self.enqueued.removeAll(keepingCapacity: false)
         
         let playlist = playlists.items[indexPath.item] as! SPTPartialPlaylist
         SPTPlaylistSnapshot.playlist(withURI: playlist.playableUri, accessToken: self.session.accessToken, callback:
@@ -71,25 +80,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     let page = snap.firstTrackPage!
                     for tr in page.items {
                         if let track = tr as? SPTPlaylistTrack {
-                            self.songsForPlayback.append(track)
+                            self.enqueued.append(track)
                         }
                     }
-                    print("Loaded \(self.songsForPlayback.count) songs")
+                    print("Loaded \(self.enqueued.count) songs")
                     
                     // TODO shuffle
                     // start playback
                     print("Starting playback...")
-                    let first = self.songsForPlayback[0]
-                    self.songsForPlayback.remove(at: 0)
-                    self.player?.playSpotifyURI(first.playableUri.absoluteString, startingWith: 0, startingWithPosition: 0, callback:
-                        {(error) in
-                            if error != nil {
-                                print("Couldn't play a track!")
-                            }
-                    })
+                    self.playNextTrack()
+                    
                     self.timer.invalidate()
                     self.timer = Timer.scheduledTimer(
-                        timeInterval: 20.0,
+                        timeInterval: self.timerDuration,
                         target: self,
                         selector: #selector(self.timerAction),
                         userInfo: nil,
@@ -114,14 +117,33 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let page = response as! SPTListPage
         for tr in page.items {
             if let track = tr as? SPTPlaylistTrack {
-                self.songsForPlayback.append(track)
+                self.enqueued.append(track)
             }
         }
-        print("Loaded \(self.songsForPlayback.count) songs")
+        print("Loaded \(self.enqueued.count) songs")
         
         if page.hasNextPage {
             page.requestNextPage(withAccessToken: self.session.accessToken, callback: self.extractTracksFromPlaylistPage)
         }
+    }
+    
+    func playNextTrack() {
+        let next = self.enqueued.removeFirst()
+        self.dequeued.append(next)
+        
+        if let artwork = next.album?.largestCover {
+            self.trackArtwork.image = UIImage(data: try! Data(contentsOf: artwork.imageURL))
+        }
+        
+        self.trackName.text = next.name
+        
+        self.player?.playSpotifyURI(next.playableUri.absoluteString, startingWith: 0, startingWithPosition: 0, callback:
+            {(error) in
+                if error != nil {
+                    print("Couldn't play a track!")
+                }
+        })
+        print("Currently playing " + next.description)
     }
     
     @objc func timerAction() {
@@ -141,18 +163,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if (isPlaying) {
             return
         }
-        if (self.songsForPlayback.isEmpty) {
+        if (self.enqueued.isEmpty) {
             self.timer.invalidate()
             return
         }
-        let next = self.songsForPlayback[0]
-        self.songsForPlayback.remove(at: 0)
-        self.player?.playSpotifyURI(next.playableUri.absoluteString, startingWith: 0, startingWithPosition: 0, callback:
-            {(error) in
-                if error != nil {
-                    print("Couldn't enqueue a track!")
-                }
-        })
+        playNextTrack()
     }
     
     @objc func updateAfterFirstLogin() {
@@ -206,6 +221,60 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 if self.auth.canHandle(self.auth.redirectURL) {
                 }
         })
+    }
+    
+    @IBAction func prevTrackButtonPressed(_ sender: Any) {
+        if self.dequeued.isEmpty {
+            return
+        }
+        let lastDequeued = self.dequeued.removeLast()
+        self.enqueued.insert(lastDequeued, at: 0)
+        // invalidate the timer
+        self.timer.invalidate()
+        playNextTrack()
+        self.timer = Timer.scheduledTimer(
+            timeInterval: timerDuration,
+            target: self,
+            selector: #selector(self.timerAction),
+            userInfo: nil,
+            repeats: true
+        )
+    }
+    
+    @IBAction func prevTrackButtonRepeatPressed(_ sender: Any) {
+        if self.dequeued.count < 2 {
+            return
+        }
+        for _ in 0..<2 {
+            let lastDequeued = self.dequeued.removeLast()
+            self.enqueued.insert(lastDequeued, at: 0)
+        }
+        // invalidate the timer
+        self.timer.invalidate()
+        playNextTrack()
+        self.timer = Timer.scheduledTimer(
+            timeInterval: timerDuration,
+            target: self,
+            selector: #selector(self.timerAction),
+            userInfo: nil,
+            repeats: true
+        )
+    }
+    
+    @IBAction func nextTrackButtonPressed(_ sender: Any) {
+        if self.enqueued.isEmpty {
+            return
+        }
+        // invalidate the timer
+        self.timer.invalidate()
+        playNextTrack()
+        self.timer = Timer.scheduledTimer(
+            timeInterval: timerDuration,
+            target: self,
+            selector: #selector(self.timerAction),
+            userInfo: nil,
+            repeats: true
+        )
     }
 }
 
