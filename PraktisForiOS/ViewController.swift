@@ -18,7 +18,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var playlists: SPTPlaylistList!
     var player: SPTAudioStreamingController?
     var loginURL: URL?
-    var playing = false
+    var songsForPlayback = [SPTPlaylistTrack]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,38 +65,35 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 if let pl = data as? SPTPlaylistSnapshot {
                     for tr in pl.firstTrackPage.items {
                         if let track = tr as? SPTPlaylistTrack {
-                            if (self.playing) {
-                                self.player?.queueSpotifyURI(track.playableUri.absoluteString, callback:
-                                    {(error) in
-                                        if error != nil {
-                                            print("Couldn't enqueue a track!")
-                                        }
-                                })
-                            }
-                            else {
-                                self.player?.playSpotifyURI(track.playableUri.absoluteString, startingWith: 0, startingWithPosition:0, callback:
-                                    {(error) in
-                                        if error != nil {
-                                            print("Couldn't play a track!")
-                                        }
-                                })
-                            }
+                            self.songsForPlayback.append(track)
                         }
                     }
+                    
+                    let first = self.songsForPlayback[0]
+                    self.songsForPlayback.remove(at: 0)
+                    self.player?.playSpotifyURI(first.playableUri.absoluteString, startingWith: 0, startingWithPosition: 0, callback:
+                        {(error) in
+                            if error != nil {
+                                print("Couldn't play a track!")
+                            }
+                    })
                 }
-                
-                self.player?.setShuffle(true, callback: {(error) in
-                    if error != nil {
-                        print("Couldn't shuffle the playback list: " + error.debugDescription)
-                    }
-                })
+        })
+    }
+    
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didStopPlayingTrack trackUri: String!) {
+        let next = self.songsForPlayback[0]
+        self.songsForPlayback.remove(at: 0)
+        self.player?.playSpotifyURI(next.playableUri.absoluteString, startingWith: 0, startingWithPosition: 0, callback:
+            {(error) in
+                if error != nil {
+                    print("Couldn't enqueue a track!")
+                }
         })
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didStartPlayingTrack trackUri: String!) {
-        playing = true
         // get info about current track
-        
     }
     
     @objc func updateAfterFirstLogin() {
