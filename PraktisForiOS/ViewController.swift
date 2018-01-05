@@ -17,8 +17,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var prevTrackButton: UIButton!
     @IBOutlet weak var nextTrackButton: UIButton!
     @IBOutlet weak var pauseTrackButton: UIButton!
-    
-    let timerDuration = 120.0
+    @IBOutlet weak var timerDuration: UITextField!
     
     var auth = SPTAuth.defaultInstance()!
     var session: SPTSession!
@@ -91,15 +90,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     // start playback
                     print("Starting playback...")
                     self.playNextTrack()
-                    
-                    self.timer.invalidate()
-                    self.timer = Timer.scheduledTimer(
-                        timeInterval: self.timerDuration,
-                        target: self,
-                        selector: #selector(self.timerAction),
-                        userInfo: nil,
-                        repeats: true
-                    )
+                    self.setTimer()
                     
                     // if more songs available, load in the background while already playing
                     if page.hasNextPage {
@@ -146,6 +137,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
         })
         print("Currently playing " + next.description)
+    }
+    
+    func setTimer(elapsed: Double = 0) {
+        self.timer.invalidate()
+        var duration = 0.0
+        if let dur = Double(self.timerDuration.text!) {
+            duration = dur
+        }
+        self.timer = Timer.scheduledTimer(
+            timeInterval: duration - elapsed,
+            target: self,
+            selector: #selector(self.timerAction),
+            userInfo: nil,
+            repeats: true
+        )
     }
     
     @objc func timerAction() {
@@ -237,13 +243,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // invalidate the timer
         self.timer.invalidate()
         playNextTrack()
-        self.timer = Timer.scheduledTimer(
-            timeInterval: timerDuration,
-            target: self,
-            selector: #selector(self.timerAction),
-            userInfo: nil,
-            repeats: true
-        )
+        setTimer()
     }
     
     @IBAction func prevTrackButtonRepeatPressed(_ sender: Any) {
@@ -257,13 +257,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // invalidate the timer
         self.timer.invalidate()
         playNextTrack()
-        self.timer = Timer.scheduledTimer(
-            timeInterval: timerDuration,
-            target: self,
-            selector: #selector(self.timerAction),
-            userInfo: nil,
-            repeats: true
-        )
+        setTimer()
     }
     
     @IBAction func nextTrackButtonPressed(_ sender: Any) {
@@ -273,13 +267,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // invalidate the timer
         self.timer.invalidate()
         playNextTrack()
-        self.timer = Timer.scheduledTimer(
-            timeInterval: timerDuration,
-            target: self,
-            selector: #selector(self.timerAction),
-            userInfo: nil,
-            repeats: true
-        )
+        setTimer()
     }
     
     @IBAction func pauseStartButtonPressed(_ sender: Any) {
@@ -291,13 +279,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         if self.paused {
             playNextTrack(startingWithPosition: self.timeElapsed)
-            self.timer = Timer.scheduledTimer(
-                timeInterval: self.timerDuration - self.timeElapsed,
-                target: self,
-                selector: #selector(self.timerAction),
-                userInfo: nil,
-                repeats: true
-            )
+            setTimer(elapsed: self.timeElapsed)
             self.paused = false
             return
         }
