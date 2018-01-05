@@ -19,6 +19,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var player: SPTAudioStreamingController?
     var loginURL: URL?
     var songsForPlayback = [SPTPlaylistTrack]()
+    var timer = Timer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,11 +78,39 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                                 print("Couldn't play a track!")
                             }
                     })
+                    self.timer.invalidate()
+                    self.timer = Timer.scheduledTimer(
+                        timeInterval: 20.0,
+                        target: self,
+                        selector: #selector(self.timerAction),
+                        userInfo: nil,
+                        repeats: true
+                    )
                 }
         })
     }
     
-    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didStopPlayingTrack trackUri: String!) {
+    @objc func timerAction() {
+        print("Timer expired!")
+        self.player?.setIsPlaying(false, callback: {(error) in
+            if error != nil {
+                print("Couldn't stop the playback!")
+            }
+        })
+    }
+
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didStartPlayingTrack trackUri: String!) {
+        // TODO get info about current track such as volume level and auto-adjust
+    }
+    
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
+        if (isPlaying) {
+            return
+        }
+        if (self.songsForPlayback.isEmpty) {
+            self.timer.invalidate()
+            return
+        }
         let next = self.songsForPlayback[0]
         self.songsForPlayback.remove(at: 0)
         self.player?.playSpotifyURI(next.playableUri.absoluteString, startingWith: 0, startingWithPosition: 0, callback:
@@ -90,10 +119,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     print("Couldn't enqueue a track!")
                 }
         })
-    }
-    
-    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didStartPlayingTrack trackUri: String!) {
-        // get info about current track
     }
     
     @objc func updateAfterFirstLogin() {
