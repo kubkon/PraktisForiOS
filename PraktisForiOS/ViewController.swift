@@ -28,6 +28,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var dequeued = [SPTPlaylistTrack]()
     var enqueued = [SPTPlaylistTrack]()
     var timer = Timer()
+    var paused = false
+    var timeElapsed = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -127,7 +129,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    func playNextTrack() {
+    func playNextTrack(startingWithPosition: Double = 0) {
         let next = self.enqueued.removeFirst()
         self.dequeued.append(next)
         
@@ -137,7 +139,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         self.trackName.text = next.name
         
-        self.player?.playSpotifyURI(next.playableUri.absoluteString, startingWith: 0, startingWithPosition: 0, callback:
+        self.player?.playSpotifyURI(next.playableUri.absoluteString, startingWith: 0, startingWithPosition: startingWithPosition, callback:
             {(error) in
                 if error != nil {
                     print("Couldn't play a track!")
@@ -160,10 +162,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
-        if (isPlaying) {
+        if isPlaying {
             return
         }
-        if (self.enqueued.isEmpty) {
+        if paused {
+            return
+        }
+        if self.enqueued.isEmpty {
             self.timer.invalidate()
             return
         }
@@ -275,6 +280,40 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             userInfo: nil,
             repeats: true
         )
+    }
+    
+    @IBAction func pauseStartButtonPressed(_ sender: Any) {
+        if self.dequeued.isEmpty && self.enqueued.isEmpty {
+            return
+        }
+        if !self.player!.playbackState.isPlaying && self.enqueued.isEmpty {
+            return
+        }
+        if self.paused {
+            playNextTrack(startingWithPosition: self.timeElapsed)
+            self.timer = Timer.scheduledTimer(
+                timeInterval: self.timerDuration - self.timeElapsed,
+                target: self,
+                selector: #selector(self.timerAction),
+                userInfo: nil,
+                repeats: true
+            )
+            self.paused = false
+            return
+        }
+        let lastDequeued = self.dequeued.removeLast()
+        self.enqueued.insert(lastDequeued, at: 0)
+        // pause the timer
+        self.timer.invalidate()
+        self.player?.setIsPlaying(false, callback: {(error) in
+            if error != nil {
+                print("Couldn't pause the playback!")
+                return
+            }
+            
+            self.timeElapsed = self.player!.playbackState.position
+            self.paused = true
+        })
     }
 }
 

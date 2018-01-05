@@ -84,6 +84,9 @@
                                 <rect key="frame" x="758" y="419" width="42" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Pause"/>
+                                <connections>
+                                    <action selector="pauseStartButtonPressed:" destination="BYZ-38-t0r" eventType="touchDown" id="LkO-x8-6Zj"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="arF-dd-I9s">
                                 <rect key="frame" x="654" y="381" width="250" height="21"/>
