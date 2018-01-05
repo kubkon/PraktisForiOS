@@ -56,20 +56,29 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // Clean up
+        self.songsForPlayback.removeAll(keepingCapacity: false)
+        
         let playlist = playlists.items[indexPath.item] as! SPTPartialPlaylist
         SPTPlaylistSnapshot.playlist(withURI: playlist.playableUri, accessToken: self.session.accessToken, callback:
             {(error, data) in
                 if error != nil {
                     print("Something went wrong: " + error.debugDescription)
+                    return
                 }
                 
-                if let pl = data as? SPTPlaylistSnapshot {
-                    for tr in pl.firstTrackPage.items {
+                if let snap = data as? SPTPlaylistSnapshot {
+                    let page = snap.firstTrackPage!
+                    for tr in page.items {
                         if let track = tr as? SPTPlaylistTrack {
                             self.songsForPlayback.append(track)
                         }
                     }
+                    print("Loaded \(self.songsForPlayback.count) songs")
                     
+                    // TODO shuffle
+                    // start playback
+                    print("Starting playback...")
                     let first = self.songsForPlayback[0]
                     self.songsForPlayback.remove(at: 0)
                     self.player?.playSpotifyURI(first.playableUri.absoluteString, startingWith: 0, startingWithPosition: 0, callback:
@@ -86,8 +95,33 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                         userInfo: nil,
                         repeats: true
                     )
+                    
+                    // if more songs available, load in the background while already playing
+                    if page.hasNextPage {
+                        page.requestNextPage(withAccessToken: self.session.accessToken, callback: self.extractTracksFromPlaylistPage)
+                    }
                 }
         })
+    }
+    
+    func extractTracksFromPlaylistPage(error: Error?, response: Any?) {
+        print("More songs available, loading...")
+        if error != nil {
+            print("Something went wrong: " + error.debugDescription)
+            return
+        }
+        
+        let page = response as! SPTListPage
+        for tr in page.items {
+            if let track = tr as? SPTPlaylistTrack {
+                self.songsForPlayback.append(track)
+            }
+        }
+        print("Loaded \(self.songsForPlayback.count) songs")
+        
+        if page.hasNextPage {
+            page.requestNextPage(withAccessToken: self.session.accessToken, callback: self.extractTracksFromPlaylistPage)
+        }
     }
     
     @objc func timerAction() {
