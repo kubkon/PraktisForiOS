@@ -20,6 +20,7 @@
 		CEE08F021FF2854400F25DDA /* SpotifyAudioPlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE08EFF1FF2854400F25DDA /* SpotifyAudioPlayback.framework */; };
 		CEE08F031FF2854400F25DDA /* SpotifyAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE08F001FF2854400F25DDA /* SpotifyAuthentication.framework */; };
 		CEE08F041FF2854400F25DDA /* SpotifyMetadata.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE08F011FF2854400F25DDA /* SpotifyMetadata.framework */; };
+		CEFB664120017CBD00545BAC /* SPTAudioAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFB664020017CBD00545BAC /* SPTAudioAnalysis.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 		CEE08EFF1FF2854400F25DDA /* SpotifyAudioPlayback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAudioPlayback.framework; sourceTree = "<group>"; };
 		CEE08F001FF2854400F25DDA /* SpotifyAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAuthentication.framework; sourceTree = "<group>"; };
 		CEE08F011FF2854400F25DDA /* SpotifyMetadata.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyMetadata.framework; sourceTree = "<group>"; };
+		CEFB664020017CBD00545BAC /* SPTAudioAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPTAudioAnalysis.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +131,7 @@
 				CEE08ECB1FF27C6B00F25DDA /* LaunchScreen.storyboard */,
 				CEE08ECE1FF27C6B00F25DDA /* Info.plist */,
 				CE81870B1FF3C51C00C1F3DC /* Credentials.swift */,
+				CEFB664020017CBD00545BAC /* SPTAudioAnalysis.swift */,
 			);
 			path = PraktisForiOS;
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 				CEE08EC51FF27C6B00F25DDA /* ViewController.swift in Sources */,
 				CEE08EC31FF27C6B00F25DDA /* AppDelegate.swift in Sources */,
 				CE81870C1FF3C51C00C1F3DC /* Credentials.swift in Sources */,
+				CEFB664120017CBD00545BAC /* SPTAudioAnalysis.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

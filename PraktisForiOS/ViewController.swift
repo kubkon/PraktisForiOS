@@ -152,23 +152,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
         })
         
-        let bits = next.playableUri.absoluteString.components(separatedBy: ":")
-        let url = URL(string: "https://api.spotify.com/v1/audio-analysis/" + bits[2])
-        var request = URLRequest(url: url!)
-        request.setValue("Bearer " + self.session.accessToken, forHTTPHeaderField: "Authorization")
-        request.httpMethod = "GET"
-        let session = URLSession(configuration: URLSessionConfiguration.default)
-        let task = session.dataTask(with: request, completionHandler: {(data, response, error) in
-            let decoded = try! JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
-            if let decoded = decoded {
-                let trackInfo = decoded["track"] as? [String: Any]
-                if let trackInfo = trackInfo {
-                    print(trackInfo["tempo"] as! Double)
-                }
+        SPTAudioAnalysis.forTrack(with: next.playableUri, accessToken: self.session.accessToken, callback: {(error, data) in
+            if error != nil {
+                print("Couldn't fetch audio analysis for track " + error.debugDescription)
+                return
+            }
+            
+            if let analysis = data as? SPTAudioAnalysis {
+                print("BPM of the track: \(analysis.tempo!)")
             }
         })
-        task.resume()
-        
         print("Currently playing " + next.description)
     }
     
