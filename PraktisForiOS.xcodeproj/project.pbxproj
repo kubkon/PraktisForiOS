@@ -54,10 +54,6 @@
 		CEE08EDE1FF27C6C00F25DDA /* PraktisForiOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PraktisForiOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE08EE21FF27C6C00F25DDA /* PraktisForiOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PraktisForiOSUITests.swift; sourceTree = "<group>"; };
 		CEE08EE41FF27C6C00F25DDA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CEE08EF11FF2812C00F25DDA /* ios-sdk */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "ios-sdk"; path = "../ios-sdk"; sourceTree = "<group>"; };
-		CEE08EF31FF2819900F25DDA /* SpotifyAudioPlayback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpotifyAudioPlayback.framework; path = "../ios-sdk/SpotifyAudioPlayback.framework"; sourceTree = "<group>"; };
-		CEE08EF41FF2819900F25DDA /* SpotifyAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpotifyAuthentication.framework; path = "../ios-sdk/SpotifyAuthentication.framework"; sourceTree = "<group>"; };
-		CEE08EF51FF2819900F25DDA /* SpotifyMetadata.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpotifyMetadata.framework; path = "../ios-sdk/SpotifyMetadata.framework"; sourceTree = "<group>"; };
 		CEE08EF91FF2820500F25DDA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		CEE08EFB1FF2827D00F25DDA /* PraktisForiOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PraktisForiOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		CEE08EFC1FF2827D00F25DDA /* BridgeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgeViewController.h; sourceTree = "<group>"; };
@@ -159,10 +155,6 @@
 			isa = PBXGroup;
 			children = (
 				CEE08EF91FF2820500F25DDA /* AVFoundation.framework */,
-				CEE08EF31FF2819900F25DDA /* SpotifyAudioPlayback.framework */,
-				CEE08EF41FF2819900F25DDA /* SpotifyAuthentication.framework */,
-				CEE08EF51FF2819900F25DDA /* SpotifyMetadata.framework */,
-				CEE08EF11FF2812C00F25DDA /* ios-sdk */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
