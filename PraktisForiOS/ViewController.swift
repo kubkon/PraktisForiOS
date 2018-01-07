@@ -9,21 +9,30 @@
 import UIKit
 import AVFoundation
 
-class ViewController: UIViewController, UITableViewDelegate {
+class ViewController: UIViewController {
     @IBOutlet weak var playlistsList: UITableView!
-    @IBOutlet weak var tracksList: UIScrollView!
+    @IBOutlet weak var tracksList: UITableView!
     @IBOutlet weak var loginButton: UIButton!
     
     var spotifyController: SpotifyController!
+    var playlistsViewDelegate: PlaylistsViewDelegate!
+    var tracksViewDelegate: TracksViewDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // set up playlistView and Spotify
+        // set up Spotify
         spotifyController = SpotifyController.setUp(with: self)
         
-        playlistsList.dataSource = spotifyController
-        playlistsList.delegate = self
+        // set up playlistsViewDelegate, tracksViewDelegate
+        playlistsViewDelegate = PlaylistsViewDelegate()
+        playlistsViewDelegate.spotifyController = spotifyController
+        tracksViewDelegate = TracksViewDelegate()
+        
+        playlistsList.dataSource = playlistsViewDelegate
+        playlistsList.delegate = playlistsViewDelegate
+        tracksList.dataSource = tracksViewDelegate
+        tracksList.delegate = tracksViewDelegate
         
         // ensure playback is continued in the background
         do {
@@ -43,47 +52,6 @@ class ViewController: UIViewController, UITableViewDelegate {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // dispose of any resources that can be recreated.
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //        // Clean up
-        //        self.tracksForPlayback.removeAll(keepingCapacity: false)
-        //
-        //        if let playlist = playlists.items[indexPath.item] as? SPTPartialPlaylist {
-        //            SPTPlaylistSnapshot.playlist(withURI: playlist.playableUri, accessToken: self.session.accessToken, callback:
-        //                {(error, data) in
-        //                    if error != nil {
-        //                        print("Couldn't fetch the tracks: " + error.debugDescription)
-        //                        return
-        //                    }
-        //
-        //                    if let snap = data as? SPTPlaylistSnapshot {
-        //                        var fetchTracks: ((Error?, Any?) -> Void)!
-        //                        fetchTracks = { (error: Error?, data: Any?) -> Void in
-        //                            if error != nil {
-        //                                print("Couldn't fetch the tracks: " + error.debugDescription)
-        //                                return
-        //                            }
-        //
-        //                            if let page = data as? SPTListPage {
-        //                                for tr in page.items {
-        //                                    if let track = tr as? SPTPlaylistTrack {
-        //                                        self.tracksForPlayback.append(track)
-        //                                    }
-        //                                }
-        //                                print("Loaded \(page.items.count) tracks")
-        //
-        //                                if page.hasNextPage {
-        //                                    page.requestNextPage(withAccessToken: self.session.accessToken, callback: fetchTracks)
-        //                                } else {
-        //                                    // populate the scroll view
-        //                                }
-        //                            }
-        //                        }
-        //                        fetchTracks(nil, snap.firstTrackPage)
-        //                    }
-        //            })
-        //        }
     }
     
     @IBAction func loginButtonPressed(_ sender: Any) {

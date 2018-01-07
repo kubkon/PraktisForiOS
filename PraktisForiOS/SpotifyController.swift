@@ -8,17 +8,13 @@
 
 import Foundation
 
-class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioStreamingDelegate, UITableViewDataSource {
+class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioStreamingDelegate {
     var auth = SPTAuth.defaultInstance()!
     var loginURL: URL?
     var session: SPTSession!
-    
     var player: SPTAudioStreamingController?
     
-    var playlists: SPTPlaylistList?
-    var viewController: ViewController?
-    
-    var tracksForPlayback = [SPTPlaylistTrack]()
+    var viewController: ViewController!
     
     class func setUp(with viewController: ViewController!) -> SpotifyController {
         SPTAuth.defaultInstance().clientID = Credentials.ClientID
@@ -50,7 +46,7 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
                 withAccessToken: self.session.accessToken,
                 callback: {(error, data) in
                     if let data = data as? SPTPlaylistList {
-                        self.playlists = data
+                        self.viewController?.playlistsViewDelegate.playlists = data
                         self.viewController?.playlistsList.reloadData()
                     }
             })
@@ -73,22 +69,40 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
         
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let playlists = playlists {
-            return playlists.items.count
-        }
-        return 0
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let playlists = playlists {
-            let playlist = playlists.items[indexPath.item] as! SPTPartialPlaylist
-            let cell = UITableViewCell()
-            let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
-            label.text = playlist.name + " (\(playlist.trackCount))"
-            cell.addSubview(label)
-            return cell
-        }
-        return UITableViewCell()
+    func getTracksForPlaylist(_ uri: URL!) {
+        SPTPlaylistSnapshot.playlist(withURI: uri, accessToken: session.accessToken, callback:
+            {(error, data) in
+                if error != nil {
+                    print("Couldn't fetch the tracks: " + error.debugDescription)
+                    return
+                }
+                
+                if let snap = data as? SPTPlaylistSnapshot {
+                    var fetchTracks: ((Error?, Any?) -> Void)!
+                    fetchTracks = { (error: Error?, data: Any?) -> Void in
+                        if error != nil {
+                            print("Couldn't fetch the tracks: " + error.debugDescription)
+                            return
+                        }
+                        
+                        if let page = data as? SPTListPage {
+                            for tr in page.items {
+                                if let track = tr as? SPTPlaylistTrack {
+                                    self.viewController.tracksViewDelegate.tracks.append(track)
+                                }
+                            }
+                            print("Loaded \(page.items.count) tracks")
+                            
+                            if page.hasNextPage {
+                                page.requestNextPage(withAccessToken: self.session.accessToken, callback: fetchTracks)
+                            } else {
+                                // finished loading all tracks, then refresh
+                                self.viewController.tracksList.reloadData()
+                            }
+                        }
+                    }
+                    fetchTracks(nil, snap.firstTrackPage)
+                }
+        })
     }
 }
