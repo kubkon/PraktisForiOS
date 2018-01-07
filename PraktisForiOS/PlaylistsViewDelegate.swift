@@ -23,7 +23,7 @@ class PlaylistsViewDelegate : NSObject, UITableViewDelegate, UITableViewDataSour
         if let playlists = playlists {
             let playlist = playlists.items[indexPath.item] as! SPTPartialPlaylist
             let cell = UITableViewCell()
-            let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
+            let label = UILabel(frame: CGRect(x: 0, y: 0, width: 225, height: 50))
             label.text = playlist.name + " (\(playlist.trackCount))"
             cell.addSubview(label)
             return cell

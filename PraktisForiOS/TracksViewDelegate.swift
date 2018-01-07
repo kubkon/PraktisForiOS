@@ -25,7 +25,7 @@ class TracksViewDelegate : NSObject, UITableViewDelegate, UITableViewDataSource 
         }
         let track = tracks[indexPath.item] as SPTPlaylistTrack
         let cell = UITableViewCell()
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 550, height: 50))
         label.text = track.name
         cell.addSubview(label)
         return cell
