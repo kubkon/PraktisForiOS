@@ -32,43 +32,11 @@ class TracksViewDelegate : NSObject, UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //        // Clean up
-        //        self.tracksForPlayback.removeAll(keepingCapacity: false)
-        //
-        //        if let playlist = playlists.items[indexPath.item] as? SPTPartialPlaylist {
-        //            SPTPlaylistSnapshot.playlist(withURI: playlist.playableUri, accessToken: self.session.accessToken, callback:
-        //                {(error, data) in
-        //                    if error != nil {
-        //                        print("Couldn't fetch the tracks: " + error.debugDescription)
-        //                        return
-        //                    }
-        //
-        //                    if let snap = data as? SPTPlaylistSnapshot {
-        //                        var fetchTracks: ((Error?, Any?) -> Void)!
-        //                        fetchTracks = { (error: Error?, data: Any?) -> Void in
-        //                            if error != nil {
-        //                                print("Couldn't fetch the tracks: " + error.debugDescription)
-        //                                return
-        //                            }
-        //
-        //                            if let page = data as? SPTListPage {
-        //                                for tr in page.items {
-        //                                    if let track = tr as? SPTPlaylistTrack {
-        //                                        self.tracksForPlayback.append(track)
-        //                                    }
-        //                                }
-        //                                print("Loaded \(page.items.count) tracks")
-        //
-        //                                if page.hasNextPage {
-        //                                    page.requestNextPage(withAccessToken: self.session.accessToken, callback: fetchTracks)
-        //                                } else {
-        //                                    // populate the scroll view
-        //                                }
-        //                            }
-        //                        }
-        //                        fetchTracks(nil, snap.firstTrackPage)
-        //                    }
-        //            })
-        //        }
+        if tracks.isEmpty {
+            return
+        }
+        if let spotifyController = spotifyController {
+            spotifyController.startPlayback(from: indexPath.item)
+        }
     }
 }

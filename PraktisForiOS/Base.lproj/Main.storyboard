@@ -104,6 +104,7 @@
                     <connections>
                         <outlet property="loginButton" destination="wp8-sw-UTO" id="Poo-BS-bbD"/>
                         <outlet property="playlistsList" destination="kiX-IB-5w2" id="Lmm-Rv-uef"/>
+                        <outlet property="timerDuration" destination="NvQ-V5-Kqi" id="F6K-xW-pVi"/>
                         <outlet property="tracksList" destination="jNY-Ol-RJh" id="ncc-ZA-iRo"/>
                     </connections>
                 </viewController>

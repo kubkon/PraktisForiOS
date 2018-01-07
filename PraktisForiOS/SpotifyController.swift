@@ -7,14 +7,19 @@
 //
 
 import Foundation
+import AVFoundation
 
 class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioStreamingDelegate {
     var auth = SPTAuth.defaultInstance()!
     var loginURL: URL?
     var session: SPTSession!
     var player: SPTAudioStreamingController?
-    
     var viewController: ViewController!
+    var timer: Timer?
+    var wasTimerAction = false
+    var timeElapsed = 0.0
+    var currentTrackIndex: Int?
+    let avPlayer = AVQueuePlayer()
     
     class func setUp(with viewController: ViewController!) -> SpotifyController {
         SPTAuth.defaultInstance().clientID = Credentials.ClientID
@@ -28,7 +33,12 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
         let spotifyController = SpotifyController()
         spotifyController.loginURL = SPTAuth.defaultInstance().spotifyWebAuthenticationURL()
         spotifyController.viewController = viewController
-        NotificationCenter.default.addObserver(spotifyController, selector: #selector(SpotifyController.updateAfterFirstLogin), name: NSNotification.Name(rawValue: "loginSuccessful"), object: nil)
+        NotificationCenter.default.addObserver(
+            spotifyController,
+            selector: #selector(SpotifyController.updateAfterFirstLogin),
+            name: NSNotification.Name(rawValue: "loginSuccessful"),
+            object: nil
+        )
         
         return spotifyController
     }
@@ -40,6 +50,13 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
             let sessionDataObj = sessionObj as! Data
             let firstTimeSession = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
             session = firstTimeSession
+            
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(SpotifyController.avPlayerDidReachEnd),
+                name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+                object: avPlayer.currentItem
+            )
             
             SPTPlaylistList.playlists(
                 forUser: self.session.canonicalUsername,
@@ -61,12 +78,39 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
         }
     }
     
-    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didStartPlayingTrack trackUri: String!) {
-        
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didStopPlayingTrack trackUri: String!) {
+        // get next track
+        if let index = currentTrackIndex {
+            // check if more tracks available for playback
+            currentTrackIndex = index + 1
+            if currentTrackIndex! >= viewController.tracksViewDelegate.tracks.count {
+                timer?.invalidate()
+                return
+            }
+            let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
+            player?.playSpotifyURI(
+                track.playableUri.absoluteString,
+                startingWith: 0,
+                startingWithPosition: 0,
+                callback: {(error) in
+                    if error != nil {
+                        print("Couldn't start the playback!")
+                        return
+                    }
+            })
+        }
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
-        
+        if wasTimerAction {
+            // play "Cambio de pareja"
+            if let url = Bundle.main.url(forResource: "Cambio De Pareja", withExtension: "m4a") {
+                avPlayer.removeAllItems()
+                avPlayer.insert(AVPlayerItem(url: url), after: nil)
+                avPlayer.play()
+            }
+            wasTimerAction = false
+        }
     }
     
     func getTracksForPlaylist(_ uri: URL!) {
@@ -104,5 +148,64 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
                     fetchTracks(nil, snap.firstTrackPage)
                 }
         })
+    }
+    
+    func startPlayback(from index: Int) {
+        currentTrackIndex = index
+        let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
+        player?.playSpotifyURI(
+            track.playableUri.absoluteString,
+            startingWith: 0,
+            startingWithPosition: 0,
+            callback: {(error) in
+                if error != nil {
+                    print("Couldn't start the playback!")
+                    return
+                }
+                // start the timer
+                self.setTimer()
+        })
+    }
+    
+    @objc func avPlayerDidReachEnd() {
+        // continue playback!
+        let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
+        player?.playSpotifyURI(
+            track.playableUri.absoluteString,
+            startingWith: 0,
+            startingWithPosition: timeElapsed,
+            callback: {(error) in
+                if error != nil {
+                    print("Couldn't start the playback!")
+                    return
+                }
+        })
+    }
+    
+    func setTimer() {
+        timer?.invalidate()
+        if let timerDuration = viewController.timerDuration.text {
+            if let duration = Double(timerDuration) {
+                timer = Timer.scheduledTimer(
+                    timeInterval: duration,
+                    target: self,
+                    selector: #selector(self.timerAction),
+                    userInfo: nil,
+                    repeats: true
+                )
+            }
+        }
+    }
+    
+    @objc func timerAction() {
+        print("Timer expired!")
+        player?.setIsPlaying(false, callback: {(error) in
+            if error != nil {
+                print("Couldn't stop the playback!")
+                return
+            }
+            self.timeElapsed = self.player!.playbackState.position
+        })
+        wasTimerAction = true
     }
 }

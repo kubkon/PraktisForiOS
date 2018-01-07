@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var playlistsList: UITableView!
     @IBOutlet weak var tracksList: UITableView!
     @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var timerDuration: UITextField!
     
     var spotifyController: SpotifyController!
     var playlistsViewDelegate: PlaylistsViewDelegate!
@@ -28,6 +29,7 @@ class ViewController: UIViewController {
         playlistsViewDelegate = PlaylistsViewDelegate()
         playlistsViewDelegate.spotifyController = spotifyController
         tracksViewDelegate = TracksViewDelegate()
+        tracksViewDelegate.spotifyController = spotifyController
         
         playlistsList.dataSource = playlistsViewDelegate
         playlistsList.delegate = playlistsViewDelegate

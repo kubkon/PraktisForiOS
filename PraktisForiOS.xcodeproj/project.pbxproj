@@ -12,6 +12,7 @@
 		CE95C7632002AB4D003C1EDF /* SpotifyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE95C7622002AB4D003C1EDF /* SpotifyController.swift */; };
 		CE95C7672002C7D3003C1EDF /* PlaylistsViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE95C7662002C7D3003C1EDF /* PlaylistsViewDelegate.swift */; };
 		CE95C7692002CA59003C1EDF /* TracksViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE95C7682002CA59003C1EDF /* TracksViewDelegate.swift */; };
+		CE95C7732002DDA7003C1EDF /* Cambio De Pareja.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CE95C7722002DDA7003C1EDF /* Cambio De Pareja.m4a */; };
 		CEE08EC31FF27C6B00F25DDA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE08EC21FF27C6B00F25DDA /* AppDelegate.swift */; };
 		CEE08EC51FF27C6B00F25DDA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE08EC41FF27C6B00F25DDA /* ViewController.swift */; };
 		CEE08EC81FF27C6B00F25DDA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEE08EC61FF27C6B00F25DDA /* Main.storyboard */; };
@@ -48,6 +49,7 @@
 		CE95C7622002AB4D003C1EDF /* SpotifyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyController.swift; sourceTree = "<group>"; };
 		CE95C7662002C7D3003C1EDF /* PlaylistsViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsViewDelegate.swift; sourceTree = "<group>"; };
 		CE95C7682002CA59003C1EDF /* TracksViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksViewDelegate.swift; sourceTree = "<group>"; };
+		CE95C7722002DDA7003C1EDF /* Cambio De Pareja.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Cambio De Pareja.m4a"; sourceTree = "<group>"; };
 		CEE08EBF1FF27C6B00F25DDA /* PraktisForiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PraktisForiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE08EC21FF27C6B00F25DDA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CEE08EC41FF27C6B00F25DDA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 		CEE08EB61FF27C6B00F25DDA = {
 			isa = PBXGroup;
 			children = (
+				CE95C7722002DDA7003C1EDF /* Cambio De Pareja.m4a */,
 				CEE08EFC1FF2827D00F25DDA /* BridgeViewController.h */,
 				CEE08EFD1FF2827D00F25DDA /* BridgeViewController.m */,
 				CEE08EC11FF27C6B00F25DDA /* PraktisForiOS */,
@@ -287,6 +290,7 @@
 				CEE08ECD1FF27C6B00F25DDA /* LaunchScreen.storyboard in Resources */,
 				CEE08ECA1FF27C6B00F25DDA /* Assets.xcassets in Resources */,
 				CEE08EC81FF27C6B00F25DDA /* Main.storyboard in Resources */,
+				CE95C7732002DDA7003C1EDF /* Cambio De Pareja.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
