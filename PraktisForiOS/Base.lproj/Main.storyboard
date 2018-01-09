@@ -135,6 +135,8 @@
                         <outlet property="playlistsList" destination="eVw-uh-vH1" id="qSu-kv-lcC"/>
                         <outlet property="timerDuration" destination="NvQ-V5-Kqi" id="F6K-xW-pVi"/>
                         <outlet property="timerDurationPicker" destination="j5l-34-jFo" id="Hki-xc-YTJ"/>
+                        <outlet property="trackArtwork" destination="Xhj-WH-zi5" id="e8B-hd-kti"/>
+                        <outlet property="trackName" destination="arF-dd-I9s" id="Llt-FB-Usm"/>
                         <outlet property="tracksList" destination="jNY-Ol-RJh" id="ncc-ZA-iRo"/>
                     </connections>
                 </viewController>

@@ -15,6 +15,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var timerDuration: UITextField!
     @IBOutlet weak var timerDurationPicker: UIPickerView!
+    @IBOutlet weak var trackArtwork: UIImageView!
+    @IBOutlet weak var trackName: UILabel!
     
     var spotifyController: SpotifyController!
     var playlistsViewDelegate: PlaylistsViewDelegate!

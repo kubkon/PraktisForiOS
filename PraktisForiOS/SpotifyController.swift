@@ -79,10 +79,6 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
         }
     }
     
-    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didStartPlayingTrack trackUri: String!) {
-        
-    }
-    
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didStopPlayingTrack trackUri: String!) {
         // get next track
         if let index = currentTrackIndex {
@@ -93,16 +89,7 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
                 return
             }
             let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
-            player?.playSpotifyURI(
-                track.playableUri.absoluteString,
-                startingWith: 0,
-                startingWithPosition: 0,
-                callback: {(error) in
-                    if error != nil {
-                        print("Couldn't start the playback!")
-                        return
-                    }
-            })
+            play(track)
         }
     }
     
@@ -158,6 +145,15 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
     func startPlayback(from index: Int) {
         currentTrackIndex = index
         let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
+        play(track)
+        self.setTimer()
+    }
+    
+    func play(_ track: SPTPlaylistTrack!) {
+        viewController.trackName.text = track.name
+        if let artwork = track.album?.largestCover {
+            viewController.trackArtwork.image = UIImage(data: try! Data(contentsOf: artwork.imageURL))
+        }
         player?.playSpotifyURI(
             track.playableUri.absoluteString,
             startingWith: 0,
@@ -165,10 +161,9 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
             callback: {(error) in
                 if error != nil {
                     print("Couldn't start the playback!")
+                    self.timer?.invalidate()
                     return
                 }
-                // start the timer
-                self.setTimer()
         })
     }
     
@@ -182,6 +177,7 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
             callback: {(error) in
                 if error != nil {
                     print("Couldn't start the playback!")
+                    self.timer?.invalidate()
                     return
                 }
         })
