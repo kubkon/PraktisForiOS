@@ -19,6 +19,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var trackName: UILabel!
     @IBOutlet weak var prevTrack: UIButton!
     @IBOutlet weak var nextTrack: UIButton!
+    @IBOutlet weak var pauseTrack: UIButton!
     
     var spotifyController: SpotifyController!
     var playlistsViewDelegate: PlaylistsViewDelegate!
@@ -86,5 +87,9 @@ class ViewController: UIViewController {
     
     @IBAction func nextTrackTouchDown(_ sender: Any) {
         spotifyController.playNext()
+    }
+    
+    @IBAction func pauseTrackTouchDown(_ sender: Any) {
+        spotifyController.pause()
     }
 }

@@ -20,6 +20,7 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
     var timeElapsed = 0.0
     var currentTrackIndex: Int?
     let avPlayer = AVQueuePlayer()
+    var isPaused = false
     
     class func setUp(with viewController: ViewController!) -> SpotifyController {
         SPTAuth.defaultInstance().clientID = Credentials.ClientID
@@ -191,6 +192,36 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
             currentTrackIndex = index + 1
             let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
             play(track)
+            self.setTimer()
+        }
+    }
+    
+    func pause() {
+        isPaused = !isPaused
+        if isPaused {
+            timer?.invalidate()
+            player?.setIsPlaying(false, callback: {(error) in
+                if error != nil {
+                    print("Couldn't stop the playback!")
+                    return
+                }
+                self.timeElapsed = self.player!.playbackState.position
+            })
+        }
+        else {
+            let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
+            player?.playSpotifyURI(
+                track.playableUri.absoluteString,
+                startingWith: 0,
+                startingWithPosition: timeElapsed,
+                callback: {(error) in
+                    if error != nil {
+                        print("Couldn't start the playback!")
+                        self.timer?.invalidate()
+                        return
+                    }
+            })
+            // TODO continue with timer where left off
             self.setTimer()
         }
     }
