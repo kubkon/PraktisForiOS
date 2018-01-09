@@ -9,7 +9,7 @@
 import Foundation
 
 class TracksViewDelegate : NSObject, UITableViewDelegate, UITableViewDataSource {
-    var spotifyController: SpotifyController?
+    var mainView: ViewController!
     var tracks = [SPTPlaylistTrack]()
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -35,8 +35,6 @@ class TracksViewDelegate : NSObject, UITableViewDelegate, UITableViewDataSource 
         if tracks.isEmpty {
             return
         }
-        if let spotifyController = spotifyController {
-            spotifyController.startPlayback(from: indexPath.item)
-        }
+        mainView.spotifyController.startPlayback(from: indexPath.item)
     }
 }

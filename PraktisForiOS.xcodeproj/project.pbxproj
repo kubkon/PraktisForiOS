@@ -13,6 +13,7 @@
 		CE95C7672002C7D3003C1EDF /* PlaylistsViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE95C7662002C7D3003C1EDF /* PlaylistsViewDelegate.swift */; };
 		CE95C7692002CA59003C1EDF /* TracksViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE95C7682002CA59003C1EDF /* TracksViewDelegate.swift */; };
 		CE95C7732002DDA7003C1EDF /* Cambio De Pareja.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CE95C7722002DDA7003C1EDF /* Cambio De Pareja.m4a */; };
+		CE95C775200555B2003C1EDF /* TimerDurationViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE95C774200555B2003C1EDF /* TimerDurationViewDelegate.swift */; };
 		CEE08EC31FF27C6B00F25DDA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE08EC21FF27C6B00F25DDA /* AppDelegate.swift */; };
 		CEE08EC51FF27C6B00F25DDA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE08EC41FF27C6B00F25DDA /* ViewController.swift */; };
 		CEE08EC81FF27C6B00F25DDA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEE08EC61FF27C6B00F25DDA /* Main.storyboard */; };
@@ -50,6 +51,7 @@
 		CE95C7662002C7D3003C1EDF /* PlaylistsViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsViewDelegate.swift; sourceTree = "<group>"; };
 		CE95C7682002CA59003C1EDF /* TracksViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksViewDelegate.swift; sourceTree = "<group>"; };
 		CE95C7722002DDA7003C1EDF /* Cambio De Pareja.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Cambio De Pareja.m4a"; sourceTree = "<group>"; };
+		CE95C774200555B2003C1EDF /* TimerDurationViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerDurationViewDelegate.swift; sourceTree = "<group>"; };
 		CEE08EBF1FF27C6B00F25DDA /* PraktisForiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PraktisForiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE08EC21FF27C6B00F25DDA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CEE08EC41FF27C6B00F25DDA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				CE95C7622002AB4D003C1EDF /* SpotifyController.swift */,
 				CE95C7662002C7D3003C1EDF /* PlaylistsViewDelegate.swift */,
 				CE95C7682002CA59003C1EDF /* TracksViewDelegate.swift */,
+				CE95C774200555B2003C1EDF /* TimerDurationViewDelegate.swift */,
 			);
 			path = PraktisForiOS;
 			sourceTree = "<group>";
@@ -320,6 +323,7 @@
 				CE95C7672002C7D3003C1EDF /* PlaylistsViewDelegate.swift in Sources */,
 				CEE08EC51FF27C6B00F25DDA /* ViewController.swift in Sources */,
 				CEE08EC31FF27C6B00F25DDA /* AppDelegate.swift in Sources */,
+				CE95C775200555B2003C1EDF /* TimerDurationViewDelegate.swift in Sources */,
 				CE81870C1FF3C51C00C1F3DC /* Credentials.swift in Sources */,
 				CE95C7632002AB4D003C1EDF /* SpotifyController.swift in Sources */,
 				CEFB664120017CBD00545BAC /* SPTAudioAnalysis.swift in Sources */,

@@ -28,7 +28,8 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
             SPTAuthStreamingScope,
             SPTAuthPlaylistReadPrivateScope,
             SPTAuthPlaylistModifyPublicScope,
-            SPTAuthPlaylistModifyPrivateScope
+            SPTAuthPlaylistModifyPrivateScope,
+            SPTAuthPlaylistReadCollaborativeScope
         ]
         let spotifyController = SpotifyController()
         spotifyController.loginURL = SPTAuth.defaultInstance().spotifyWebAuthenticationURL()
@@ -185,9 +186,12 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
     func setTimer() {
         timer?.invalidate()
         if let timerDuration = viewController.timerDuration.text {
-            if let duration = Double(timerDuration) {
+            if let duration = Int(timerDuration) {
+                if duration == 0 {
+                    return
+                }
                 timer = Timer.scheduledTimer(
-                    timeInterval: duration,
+                    timeInterval: Double(duration),
                     target: self,
                     selector: #selector(self.timerAction),
                     userInfo: nil,

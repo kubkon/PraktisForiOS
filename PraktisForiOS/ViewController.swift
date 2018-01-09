@@ -14,22 +14,33 @@ class ViewController: UIViewController {
     @IBOutlet weak var tracksList: UITableView!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var timerDuration: UITextField!
+    @IBOutlet weak var timerDurationPicker: UIPickerView!
     
     var spotifyController: SpotifyController!
     var playlistsViewDelegate: PlaylistsViewDelegate!
     var tracksViewDelegate: TracksViewDelegate!
+    var timerDurationViewDelegate: TimerDurationViewDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // set default timerDuration
+        timerDurationViewDelegate = TimerDurationViewDelegate()
+        timerDurationViewDelegate.mainView = self
+        timerDuration.text = String(timerDurationViewDelegate.timerDurations[0]);
+        timerDurationPicker.isHidden = true;
+        timerDurationPicker.dataSource = timerDurationViewDelegate
+        timerDurationPicker.delegate = timerDurationViewDelegate
+        timerDuration.delegate = timerDurationViewDelegate
         
         // set up Spotify
         spotifyController = SpotifyController.setUp(with: self)
         
         // set up playlistsViewDelegate, tracksViewDelegate
         playlistsViewDelegate = PlaylistsViewDelegate()
-        playlistsViewDelegate.spotifyController = spotifyController
+        playlistsViewDelegate.mainView = self
         tracksViewDelegate = TracksViewDelegate()
-        tracksViewDelegate.spotifyController = spotifyController
+        tracksViewDelegate.mainView = self
         
         playlistsList.dataSource = playlistsViewDelegate
         playlistsList.delegate = playlistsViewDelegate

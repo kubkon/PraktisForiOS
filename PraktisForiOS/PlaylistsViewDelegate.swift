@@ -9,7 +9,7 @@
 import Foundation
 
 class PlaylistsViewDelegate : NSObject, UITableViewDelegate, UITableViewDataSource {
-    var spotifyController: SpotifyController?
+    var mainView: ViewController!
     var playlists: SPTPlaylistList?
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -34,7 +34,7 @@ class PlaylistsViewDelegate : NSObject, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let playlists = playlists {
             if let playlist = playlists.items[indexPath.item] as? SPTPartialPlaylist {
-                spotifyController?.getTracksForPlaylist(playlist.uri)
+                mainView.spotifyController.getTracksForPlaylist(playlist.uri)
             }
         }
     }
