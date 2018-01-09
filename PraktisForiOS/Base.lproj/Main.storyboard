@@ -59,11 +59,17 @@
                                 <rect key="frame" x="905" y="313" width="31" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Prev"/>
+                                <connections>
+                                    <action selector="prevTrackTouchDown:" destination="BYZ-38-t0r" eventType="touchDown" id="Tpa-3j-Mg2"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8av-kR-OMf">
                                 <rect key="frame" x="1031" y="313" width="32" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Next"/>
+                                <connections>
+                                    <action selector="nextTrackTouchDown:" destination="BYZ-38-t0r" eventType="touchDown" id="RZ9-eD-79W"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1IA-NW-Gzt">
                                 <rect key="frame" x="963" y="313" width="42" height="30"/>
@@ -132,7 +138,9 @@
                     </view>
                     <connections>
                         <outlet property="loginButton" destination="wp8-sw-UTO" id="Poo-BS-bbD"/>
+                        <outlet property="nextTrack" destination="8av-kR-OMf" id="7Ka-E4-3YW"/>
                         <outlet property="playlistsList" destination="eVw-uh-vH1" id="qSu-kv-lcC"/>
+                        <outlet property="prevTrack" destination="EUk-CV-Y88" id="RyN-aN-B4L"/>
                         <outlet property="timerDuration" destination="NvQ-V5-Kqi" id="F6K-xW-pVi"/>
                         <outlet property="timerDurationPicker" destination="j5l-34-jFo" id="Hki-xc-YTJ"/>
                         <outlet property="trackArtwork" destination="Xhj-WH-zi5" id="e8B-hd-kti"/>

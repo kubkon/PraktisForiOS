@@ -17,6 +17,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var timerDurationPicker: UIPickerView!
     @IBOutlet weak var trackArtwork: UIImageView!
     @IBOutlet weak var trackName: UILabel!
+    @IBOutlet weak var prevTrack: UIButton!
+    @IBOutlet weak var nextTrack: UIButton!
     
     var spotifyController: SpotifyController!
     var playlistsViewDelegate: PlaylistsViewDelegate!
@@ -76,5 +78,12 @@ class ViewController: UIViewController {
                     if self.spotifyController.auth.canHandle(self.spotifyController.auth.redirectURL) {}
             })
         }
+    }
+    @IBAction func prevTrackTouchDown(_ sender: Any) {
+        spotifyController.playPrevious()
+    }
+    
+    @IBAction func nextTrackTouchDown(_ sender: Any) {
+        spotifyController.playNext()
     }
 }

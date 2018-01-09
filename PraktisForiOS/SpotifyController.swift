@@ -167,6 +167,32 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
         })
     }
     
+    func playPrevious() {
+        if let index = currentTrackIndex {
+            // check if more tracks available for playback
+            if currentTrackIndex! - 1 < 0 {
+                return
+            }
+            currentTrackIndex = index - 1
+            let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
+            play(track)
+            self.setTimer()
+        }
+    }
+    
+    func playNext() {
+        if let index = currentTrackIndex {
+            // check if more tracks available for playback
+            if currentTrackIndex! + 1 >= viewController.tracksViewDelegate.tracks.count {
+                return
+            }
+            currentTrackIndex = index + 1
+            let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
+            play(track)
+            self.setTimer()
+        }
+    }
+    
     @objc func avPlayerDidReachEnd() {
         // continue playback!
         let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
