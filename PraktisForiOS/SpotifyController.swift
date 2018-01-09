@@ -113,6 +113,7 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
                     return
                 }
                 
+                var tracks = [SPTPlaylistTrack]()
                 if let snap = data as? SPTPlaylistSnapshot {
                     var fetchTracks: ((Error?, Any?) -> Void)!
                     fetchTracks = { (error: Error?, data: Any?) -> Void in
@@ -124,7 +125,7 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
                         if let page = data as? SPTListPage {
                             for tr in page.items {
                                 if let track = tr as? SPTPlaylistTrack {
-                                    self.viewController.tracksViewDelegate.tracks.append(track)
+                                    tracks.append(track)
                                 }
                             }
                             print("Loaded \(page.items.count) tracks")
@@ -133,6 +134,7 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
                                 page.requestNextPage(withAccessToken: self.session.accessToken, callback: fetchTracks)
                             } else {
                                 // finished loading all tracks, then refresh
+                                self.viewController.tracksViewDelegate.tracks = tracks
                                 self.viewController.tracksList.reloadData()
                             }
                         }

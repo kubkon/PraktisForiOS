@@ -79,6 +79,7 @@ class ViewController: UIViewController {
             })
         }
     }
+    
     @IBAction func prevTrackTouchDown(_ sender: Any) {
         spotifyController.playPrevious()
     }
