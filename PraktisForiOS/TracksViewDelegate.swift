@@ -35,6 +35,6 @@ class TracksViewDelegate : NSObject, UITableViewDelegate, UITableViewDataSource 
         if tracks.isEmpty {
             return
         }
-        mainView.spotifyController.startPlayback(from: indexPath.item)
+        mainView.spotifyController.startPlayback(from: indexPath)
     }
 }

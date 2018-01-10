@@ -18,7 +18,7 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
     var timer: Timer?
     var wasTimerAction = false
     var timeElapsed = 0.0
-    var currentTrackIndex: Int?
+    var currentTrackIndex: IndexPath!
     let avPlayer = AVQueuePlayer()
     var isPlaying = false
     
@@ -82,16 +82,14 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didStopPlayingTrack trackUri: String!) {
         // get next track
-        if let index = currentTrackIndex {
-            // check if more tracks available for playback
-            currentTrackIndex = index + 1
-            if currentTrackIndex! >= viewController.tracksViewDelegate.tracks.count {
-                self.invalidateTimer()
-                return
-            }
-            let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
-            stream(track)
+        // check if more tracks available for playback
+        currentTrackIndex.item += 1
+        if currentTrackIndex.item >= viewController.tracksViewDelegate.tracks.count {
+            self.invalidateTimer()
+            return
         }
+        let track = viewController.tracksViewDelegate.tracks[currentTrackIndex.item]
+        stream(track)
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
@@ -147,10 +145,14 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
     }
     
     func stream(_ track: SPTPlaylistTrack!) {
+        // update title and artwork placeholders
         viewController.trackName.text = track.name
         if let artwork = track.album?.largestCover {
             viewController.trackArtwork.image = UIImage(data: try! Data(contentsOf: artwork.imageURL))
         }
+        // highlight currently played track in the TrackView
+        viewController.tracksList.selectRow(at: currentTrackIndex, animated: false, scrollPosition: UITableViewScrollPosition.none)
+        // start streaming
         player?.playSpotifyURI(
             track.playableUri.absoluteString,
             startingWith: 0,
@@ -164,37 +166,33 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
         })
     }
     
-    func startPlayback(from index: Int) {
+    func startPlayback(from index: IndexPath) {
         currentTrackIndex = index
-        let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
+        let track = viewController.tracksViewDelegate.tracks[currentTrackIndex.item]
         stream(track)
         self.setTimer()
     }
     
     func playPrevious() {
-        if let index = currentTrackIndex {
-            // check if more tracks available for playback
-            if currentTrackIndex! - 1 < 0 {
-                return
-            }
-            currentTrackIndex = index - 1
-            let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
-            stream(track)
-            self.setTimer()
+        // check if more tracks available for playback
+        if currentTrackIndex.item - 1 < 0 {
+            return
         }
+        currentTrackIndex.item -= 1
+        let track = viewController.tracksViewDelegate.tracks[currentTrackIndex.item]
+        stream(track)
+        self.setTimer()
     }
     
     func playNext() {
-        if let index = currentTrackIndex {
-            // check if more tracks available for playback
-            if currentTrackIndex! + 1 >= viewController.tracksViewDelegate.tracks.count {
-                return
-            }
-            currentTrackIndex = index + 1
-            let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
-            stream(track)
-            self.setTimer()
+        // check if more tracks available for playback
+        if currentTrackIndex.item + 1 >= viewController.tracksViewDelegate.tracks.count {
+            return
         }
+        currentTrackIndex.item += 1
+        let track = viewController.tracksViewDelegate.tracks[currentTrackIndex.item]
+        stream(track)
+        self.setTimer()
     }
     
     func pause() {
@@ -209,7 +207,7 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
             })
         }
         else {
-            let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
+            let track = viewController.tracksViewDelegate.tracks[currentTrackIndex.item]
             player?.playSpotifyURI(
                 track.playableUri.absoluteString,
                 startingWith: 0,
@@ -228,7 +226,7 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
     
     @objc func avPlayerDidReachEnd() {
         // continue playback!
-        let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
+        let track = viewController.tracksViewDelegate.tracks[currentTrackIndex.item]
         player?.playSpotifyURI(
             track.playableUri.absoluteString,
             startingWith: 0,
