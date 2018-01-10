@@ -20,7 +20,7 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
     var timeElapsed = 0.0
     var currentTrackIndex: Int?
     let avPlayer = AVQueuePlayer()
-    var isPaused = false
+    var isPlaying = false
     
     class func setUp(with viewController: ViewController!) -> SpotifyController {
         SPTAuth.defaultInstance().clientID = Credentials.ClientID
@@ -86,15 +86,16 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
             // check if more tracks available for playback
             currentTrackIndex = index + 1
             if currentTrackIndex! >= viewController.tracksViewDelegate.tracks.count {
-                timer?.invalidate()
+                self.invalidateTimer()
                 return
             }
             let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
-            play(track)
+            stream(track)
         }
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
+        self.isPlaying = isPlaying
         if wasTimerAction {
             // play "Cambio de pareja"
             if let url = Bundle.main.url(forResource: "Cambio De Pareja", withExtension: "m4a") {
@@ -145,14 +146,7 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
         })
     }
     
-    func startPlayback(from index: Int) {
-        currentTrackIndex = index
-        let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
-        play(track)
-        self.setTimer()
-    }
-    
-    func play(_ track: SPTPlaylistTrack!) {
+    func stream(_ track: SPTPlaylistTrack!) {
         viewController.trackName.text = track.name
         if let artwork = track.album?.largestCover {
             viewController.trackArtwork.image = UIImage(data: try! Data(contentsOf: artwork.imageURL))
@@ -170,6 +164,13 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
         })
     }
     
+    func startPlayback(from index: Int) {
+        currentTrackIndex = index
+        let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
+        stream(track)
+        self.setTimer()
+    }
+    
     func playPrevious() {
         if let index = currentTrackIndex {
             // check if more tracks available for playback
@@ -178,7 +179,7 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
             }
             currentTrackIndex = index - 1
             let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
-            play(track)
+            stream(track)
             self.setTimer()
         }
     }
@@ -191,16 +192,15 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
             }
             currentTrackIndex = index + 1
             let track = viewController.tracksViewDelegate.tracks[currentTrackIndex!]
-            play(track)
+            stream(track)
             self.setTimer()
         }
     }
     
     func pause() {
-        isPaused = !isPaused
-        if isPaused {
-            timer?.invalidate()
-            player?.setIsPlaying(false, callback: {(error) in
+        if isPlaying {
+            invalidateTimer()
+            player?.setIsPlaying(!isPlaying, callback: {(error) in
                 if error != nil {
                     print("Couldn't stop the playback!")
                     return
@@ -217,7 +217,7 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
                 callback: {(error) in
                     if error != nil {
                         print("Couldn't start the playback!")
-                        self.timer?.invalidate()
+                        self.invalidateTimer()
                         return
                     }
             })
@@ -236,14 +236,14 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
             callback: {(error) in
                 if error != nil {
                     print("Couldn't start the playback!")
-                    self.timer?.invalidate()
+                    self.invalidateTimer()
                     return
                 }
         })
     }
     
     func setTimer() {
-        timer?.invalidate()
+        invalidateTimer()
         if let timerDuration = viewController.timerDuration.text {
             if let duration = Int(timerDuration) {
                 if duration == 0 {
@@ -256,8 +256,14 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
                     userInfo: nil,
                     repeats: true
                 )
+                print("Timer set!")
             }
         }
+    }
+    
+    func invalidateTimer() {
+        timer?.invalidate()
+        print("Timer invalidated")
     }
     
     @objc func timerAction() {
@@ -270,5 +276,13 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
             self.timeElapsed = self.player!.playbackState.position
         })
         wasTimerAction = true
+    }
+    
+    func updateTimer() {
+        print("Updating timer!")
+        if !isPlaying {
+            return
+        }
+        setTimer()
     }
 }

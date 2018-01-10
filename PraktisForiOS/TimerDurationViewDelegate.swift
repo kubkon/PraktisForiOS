@@ -27,6 +27,7 @@ class TimerDurationViewDelegate : NSObject, UIPickerViewDataSource, UIPickerView
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         mainView.timerDuration.text = String(timerDurations[row])
         mainView.timerDurationPicker.isHidden = true
+        mainView.spotifyController.updateTimer()
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
