@@ -18,6 +18,8 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
     var timer: Timer?
     var wasTimerAction = false
     var timeElapsed = 0.0
+    var volume = 1.0
+    let volumeReductionFactor = 0.5
     var currentTrackIndex: IndexPath!
     let avPlayer = AVQueuePlayer()
     var isPlaying = false
@@ -94,8 +96,10 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
         self.isPlaying = isPlaying
+    }
+    
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangeVolume volume: SPTVolume) {
         if wasTimerAction {
-            // play "Cambio de pareja"
             if let url = Bundle.main.url(forResource: "Cambio De Pareja", withExtension: "m4a") {
                 avPlayer.removeAllItems()
                 avPlayer.insert(AVPlayerItem(url: url), after: nil)
@@ -226,17 +230,12 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
     
     @objc func avPlayerDidReachEnd() {
         // continue playback!
-        let track = viewController.tracksViewDelegate.tracks[currentTrackIndex.item]
-        player?.playSpotifyURI(
-            track.playableUri.absoluteString,
-            startingWith: 0,
-            startingWithPosition: timeElapsed,
-            callback: {(error) in
-                if error != nil {
-                    print("Couldn't start the playback!")
-                    self.invalidateTimer()
-                    return
-                }
+        player?.setVolume(volume, callback: {(error) in
+            if error != nil {
+                print("Couldn't change volume!")
+                self.invalidateTimer()
+                return
+            }
         })
     }
     
@@ -266,12 +265,13 @@ class SpotifyController : NSObject, SPTAudioStreamingPlaybackDelegate, SPTAudioS
     
     @objc func timerAction() {
         print("Timer expired!")
-        player?.setIsPlaying(false, callback: {(error) in
+        if let v = player?.volume {
+            volume = v
+        }
+        player?.setVolume(volume * volumeReductionFactor, callback: {(error) in
             if error != nil {
-                print("Couldn't stop the playback!")
-                return
+                print("Couldn't change volume!")
             }
-            self.timeElapsed = self.player!.playbackState.position
         })
         wasTimerAction = true
     }
